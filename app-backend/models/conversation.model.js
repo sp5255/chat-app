@@ -1,6 +1,4 @@
 const { Schema, model } = require("mongoose");
-// const User = require("./userModel");
-// const Message = require("./messageModel");
 
 const converstionSchema = new Schema({
   participants: [
