@@ -9,6 +9,6 @@ exports.handleFieldError = ({ field, message }, res) => {
     .status(500);
 };
 
-exports.handleSuccessResponse = ({ field, message }) => {
+exports.handleSuccessResponse = ({ field, message }, res) => {
   res.json({ message }).status(200);
 };

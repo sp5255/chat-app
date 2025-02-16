@@ -1,5 +1,5 @@
 const { getUser, addUser } = require("../services/user.service");
-const { handleSuccessResponse } = require("../utils/fieldErrorResponse");
+const { handleSuccessResponse } = require("../utils/handleResponse");
 
 const userSignIn = async (req, res) => {
   const { email, password } = req.body || {};
@@ -39,6 +39,7 @@ const validateUserData = async (req, res, next) => {
 };
 
 const userSignUp = async (req, res) => {
+  const { username, email, password } = req.body;
   const user = await getUser({ email });
   if (user) {
     return res
@@ -48,8 +49,8 @@ const userSignUp = async (req, res) => {
 
   //   const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    await addUser({ email, password });
-    handleSuccessResponse({ message: "User sign up succussfull" });
+    await addUser({ username, email, password });
+    handleSuccessResponse({ message: "User sign up successful" }, res);
   } catch (error) {
     console.log(error.message);
     if (error.name === "ValidationError") {
