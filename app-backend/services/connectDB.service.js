@@ -1,4 +1,4 @@
-import { connect } from "mongoose";
+const { connect, connection } = require("mongoose");
 
 const makeDBConnection = async () => {
   const dbUrl =
@@ -9,6 +9,10 @@ const makeDBConnection = async () => {
   } catch (err) {
     console.log("error connecting mongo db", err);
   }
+
+  connection.on("error", () => {
+    console.log("some error occurred in connecting with mongodb");
+  });
 };
 
-export default makeDBConnection;
+module.exports = makeDBConnection;

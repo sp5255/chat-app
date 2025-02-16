@@ -4,6 +4,7 @@ const helloWorldRoute = require("./routes/hello-world.route");
 const userRegistrationRoutes = require("./routes/registration.route");
 
 const User = require("./models/user.model");
+const makeDBConnection = require("./services/connectDB.service");
 const PORT = 3000;
 const app = express();
 
@@ -11,6 +12,8 @@ const logger = (req, _, next) => {
   console.log(req.method, req.path);
   next();
 };
+
+makeDBConnection();
 
 app.use(express.json());
 app.use(logger);
@@ -34,4 +37,10 @@ app.get("/users/:id", async (req, res) => {
   res.status(200).json(user);
 });
 
-app.listen(PORT, () => console.log(`listening at ${PORT}`));
+const server = app.listen(PORT, () => console.log(`listening at ${PORT}`));
+
+// if (server) {
+//   console.log("start : ", server);
+// } else {
+//   console.log("stop : ", server);
+// }
