@@ -1,12 +1,19 @@
-const { getUser, addUser } = require("../services/user.service");
+const jwt = require("jsonwebtoken");
+
+const {
+  getUser,
+  addUser,
+  getUserById: getUserByIdService,
+} = require("../services/user.service");
 const { handleSuccessResponse } = require("../utils/handleResponse");
+const SECRET_KEY = "secret-key";
 
 const userSignIn = async (req, res) => {
   const { email, password } = req.body || {};
 
   const user = await getUser({ email });
   if (!user) {
-    return res.status(400).json({ message: "User not found" });
+    return res.status(401).json({ message: "User not found" });
   }
   //   const found = await bcrypt.compare(password ?? "", user.password ?? "");
 
@@ -16,7 +23,7 @@ const userSignIn = async (req, res) => {
       .json({ error: { name: "Password", message: "password is incorrect" } });
   }
   const token = jwt.sign({ email: user.email }, SECRET_KEY, {
-    expiresIn: 60,
+    expiresIn: "2h",
   });
 
   // Send the token to the user
@@ -52,7 +59,6 @@ const userSignUp = async (req, res) => {
     await addUser({ username, email, password });
     handleSuccessResponse({ message: "User sign up successful" }, res);
   } catch (error) {
-    console.log(error.message);
     if (error.name === "ValidationError") {
       const errors = {};
       Object.keys(error.errors).forEach((key) => {
@@ -65,6 +71,20 @@ const userSignUp = async (req, res) => {
   }
 };
 
+const getUserByEmail = async (req, res) => {
+  const { email } = req.params;
+  const user = await getUser({ email });
+  res.json(user).status(200);
+};
+const getUserById = async (req, res) => {
+  console.log("req params : ", req.params);
+  const { id } = req.params || {};
+  const user = await getUserByIdService({ id });
+  res.json(user).status(200);
+};
+
 exports.userSignIn = userSignIn;
 exports.userSignUp = userSignUp;
 exports.validateUserData = validateUserData;
+exports.getUserByEmail = getUserByEmail;
+exports.getUserById = getUserById;

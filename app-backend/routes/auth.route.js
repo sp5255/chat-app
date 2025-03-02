@@ -4,9 +4,12 @@ const {
   userSignIn,
   userSignUp,
   validateUserData,
-} = require("../controller/registration.controller");
+  getUserByEmail,
+  getUserById,
+} = require("../controller/auth.controller");
 
-console.log("user ", userSignIn, userSignUp);
+// router.get("/:email", getUserByEmail);
+router.get("/:id", getUserById);
 router.post("/sign-in", validateUserData, userSignIn);
 router.post("/sign-up", validateUserData, userSignUp);
 
