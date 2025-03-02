@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run start-frontend & npm run start-backend",
     "start-frontend": "cd app-frontend && npm run dev",
-    "start-backend": "cd app-backend && npm start",
+    "start-backend": "cd app-backend && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
