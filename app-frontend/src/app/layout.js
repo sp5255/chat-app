@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Sidenav />
-        {children}
+        <div className="ml-[53px]">{children}</div>
       </body>
     </html>
   );
