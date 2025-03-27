@@ -5,7 +5,7 @@ const {
   addUser,
   getUserById: getUserByIdService,
 } = require("../services/user.service");
-const { handleSuccessResponse } = require("../utils/handleResponse");
+const { handleSuccessResponse, handleFieldError } = require("../utils/handleResponse");
 const SECRET_KEY = "secret-key";
 
 const userSignIn = async (req, res) => {
