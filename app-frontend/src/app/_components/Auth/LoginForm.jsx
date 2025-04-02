@@ -2,11 +2,22 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { handleSubmitForm } from "./util";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, getUser } from "lib/features/auth/authSlice";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [state, formAction, isPending] = useActionState(handleSubmitForm, null);
+  const dispatch = useDispatch();
+  const user = useSelector(getUser);
+  const router = useRouter();
 
-  console.log("state : ", state);
+  if (state?.isAuthenticated) {
+    dispatch(addUser({ email: state?.email }));
+    router.replace("/all_chats");
+  }
+
+  console.log("state : ", state, user);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">

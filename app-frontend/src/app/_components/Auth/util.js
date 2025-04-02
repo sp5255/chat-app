@@ -1,7 +1,6 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export const handleSubmitForm = async (prevState, formData) => {
   console.log("submitting..");
@@ -27,11 +26,10 @@ export const handleSubmitForm = async (prevState, formData) => {
       return { isAuthenticate: false };
     }
     const cookieStore = await cookies();
-      cookieStore.set("token", token);
-      
+    cookieStore.set("token", token);
   } catch (e) {
     return { isAuthenticate: false };
   }
-  redirect("/all_chats");
-  return { isAuthenticate: true };
+  // redirect("/all_chats");
+  return { isAuthenticate: true, email: formData.get("email") };
 };
