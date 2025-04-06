@@ -6,11 +6,7 @@ const authSlice = createSlice({
   initialState: { isAuthenticated: false, email: "" },
   reducers: {
     addUser: (state, action) => {
-      state.push({
-        id: action.payload.id,
-        email: action.payload.email,
-        isAuthenticated: action.payload.isAuthenticated,
-      });
+      state = { ...state, email: action.payload.email };
     },
     signUp(state, action) {
       const todo = state.find((todo) => todo.id === action.payload);
