@@ -1,35 +1,32 @@
 "use server";
 
+import { BASE_URL } from "const";
+import axios from "lib/axiosIntstance";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const handleSubmitForm = async (prevState, formData) => {
   console.log("submitting..");
 
   try {
-    // const loginPath = "/users/sign-in";
-    const loginPath = "http://localhost:5500/user/sign-in";
-    const response = await fetch(loginPath, {
+    const { data } = await axios({
       method: "POST",
-      body: JSON.stringify({
+      url: "/user/sign-in",
+      data: {
         email: formData.get("email"),
         password: formData.get("password"),
-      }),
-      headers: {
-        "Content-Type": "application/json",
       },
     });
-
-    const { token } = await response.json();
-    console.log("resp : ", token);
+    const { token } = data || "";
 
     if (!token) {
-      return { isAuthenticate: false };
+      return { isAuthenticated: false };
     }
     const cookieStore = await cookies();
     cookieStore.set("token", token);
   } catch (e) {
-    return { isAuthenticate: false };
+    console.log("err in login util: ", e);
+    return { isAuthenticated: false, error: e.data?.error || e.data };
   }
-  // redirect("/all_chats");
-  return { isAuthenticate: true, email: formData.get("email") };
+  return { isAuthenticated: true, email: formData.get("email") };
 };
