@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { BiSolidChat } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { TbLogout2, TbSettingsFilled } from "react-icons/tb";
