@@ -1,7 +1,7 @@
+import { Sidenav, UpdateAuthToRedux } from "@/components/index";
+import StoreProvider from "StoreProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Sidenav } from "@/components/index";
-import StoreProvider from "StoreProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +25,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <StoreProvider>
+          <UpdateAuthToRedux />
           <Sidenav />
           <div className="ml-[53px]">{children}</div>
         </StoreProvider>
