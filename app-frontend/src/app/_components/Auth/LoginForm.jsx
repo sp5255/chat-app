@@ -13,7 +13,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (state?.isAuthenticated && !isPending) {
-      dispatch(addUser({ email: state?.email }));
+      // dispatch(addUser({ email: state?.email }));
       router.replace("/all_chats");
     }
   }, [state?.isAuthenticated, isPending]);

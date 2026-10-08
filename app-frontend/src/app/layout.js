@@ -1,6 +1,7 @@
 import { Sidenav, UpdateAuthToRedux } from "@/components/index";
 import StoreProvider from "StoreProvider";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,16 +20,21 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <StoreProvider>
-          <UpdateAuthToRedux />
-          <Sidenav />
-          <div className="ml-[53px]">{children}</div>
-        </StoreProvider>
+        <AppRouterCacheProvider>
+          <StoreProvider>
+            {/* <UpdateAuthToRedux /> */}
+            <Sidenav />
+            <div className="ml-[53px]">
+              {children}
+            </div>
+          </StoreProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
