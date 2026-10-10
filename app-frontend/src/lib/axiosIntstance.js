@@ -1,5 +1,5 @@
 import axiosConstructor from "axios";
-import { redirect } from "next/navigation";
+import { createApiErrorObj } from "utils";
 
 const axios = axiosConstructor.create({
   baseURL: "http://localhost:5500",
@@ -34,9 +34,8 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const { status, data, statusText } = error.response || {};
-    // console.log('data : ', data)
-    return Promise.reject(data);
+    // console.log('data : ', error.response);
+    return Promise.reject(createApiErrorObj(error.response));
   }
 );
 

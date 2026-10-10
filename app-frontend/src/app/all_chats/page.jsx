@@ -2,18 +2,26 @@ import axios from "lib/axiosIntstance";
 import Chat from "./Chat";
 import Messages from "./Messages";
 import Toast from "@/components/Toast";
+import { cookies } from "next/headers";
 
-const getAllConversations = async () => {
-  try {
-    const resp = await axios("/conversation/all", {
-      method: "GET",
-    });
+const getAllConversations = async (a) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  console.log("token on chats", token);
+  const resp = await fetch("http://localhost:5500/conversation/all", {
+    credentials: "include",
+    headers: {
+      Authorization: token,
+    },
+  });
+  const data = await resp.json();
+  console.log("response : ", resp, data);
 
-    return { response: resp.data };
-  } catch (err) {
-    console.log("api error :", err);
-    return { error: err.error };
+  if (!resp.ok) {
+    // if (resp.status === 401) cookieStore.delete("token");
+    return { error: data.error, status: resp.status };
   }
+  return { response: resp.data };
 };
 
 const AllChats = async () => {
@@ -26,7 +34,9 @@ const AllChats = async () => {
 
   const { response: chats, error } = await getAllConversations();
 
-  if (error) return <Toast message={error.message} />;
+  if (error?.message) {
+    return <Toast message={error?.message} />;
+  }
 
   return (
     <div className="flex">
