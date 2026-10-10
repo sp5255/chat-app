@@ -4,7 +4,7 @@ const SECRET_KEY = "secret-key";
 
 exports.verifyToken = async (req, res, next) => {
   const token = req.header("Authorization");
-
+  
   if (!token) {
     res.status(401).json({ error: { message: "Access denied" } });
     return;
@@ -16,7 +16,9 @@ exports.verifyToken = async (req, res, next) => {
     req.user = userData._doc;
     next();
   } catch (e) {
-    res.status(401).json({ error: { message: "Invalid token" } });
+    let message = "Invalid credentials";
+    if (e.name === "TokenExpiredError") message = "Token is expired";
+    res.status(401).json({ error: { message } });
     return;
   }
 };

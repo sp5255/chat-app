@@ -1,12 +1,11 @@
 exports.handleFieldError = ({ field, message }, res) => {
-  return res
-    .json({
-      errors: {
-        name: field,
-        [field]: message,
-      },
-    })
-    .status(500);
+  return res.status(401).json({
+    // success: false,
+    errors: {
+      field,
+      [field]: message,
+    },
+  });
 };
 
 exports.handleSuccessResponse = ({ field, message }, res) => {

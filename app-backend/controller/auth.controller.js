@@ -5,7 +5,10 @@ const {
   addUser,
   getUserById: getUserByIdService,
 } = require("../services/user.service");
-const { handleSuccessResponse, handleFieldError } = require("../utils/handleResponse");
+const {
+  handleSuccessResponse,
+  handleFieldError,
+} = require("../utils/handleResponse");
 const SECRET_KEY = "secret-key";
 
 const userSignIn = async (req, res) => {
@@ -17,17 +20,17 @@ const userSignIn = async (req, res) => {
   }
   //   const found = await bcrypt.compare(password ?? "", user.password ?? "");
 
-  if (password != user.password) {
+  if (password !== user.password) {
     return res
       .status(401)
       .json({ error: { name: "Password", message: "password is incorrect" } });
   }
   const token = jwt.sign({ email: user.email }, SECRET_KEY, {
-    expiresIn: "2h",
+    expiresIn: 30,
   });
 
   // Send the token to the user
-  res.status(200).json({ token });
+  res.status(200).json({ token, user: email });
 };
 
 const validateUserData = async (req, res, next) => {
@@ -38,7 +41,7 @@ const validateUserData = async (req, res, next) => {
         field: !email ? "email" : "password",
         message: "Field is required",
       },
-      res
+      res,
     );
     return;
   }
