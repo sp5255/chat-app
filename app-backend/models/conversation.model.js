@@ -24,7 +24,7 @@ const conversationSchema = new Schema({
   },
   name: {
     type: String,
-    required: true,
+    // required: true,
   },
   lastMessage: {
     type: Schema.Types.ObjectId,

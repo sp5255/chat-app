@@ -26,7 +26,6 @@ exports.createConversation = async (req, res) => {
       });
     else {
       const users = await User.find({ _id: { $in: participants } });
-      console.log("users : ", users);
       if (users.length !== participants.length) {
         return res.status(400).json({
           errors: {
@@ -39,11 +38,11 @@ exports.createConversation = async (req, res) => {
     let conversationName;
     let receiver = participants.find((id) => id != user._id.toString());
     if (participants.length === 1) {
-      conversationName = `${user.firstName} ${user.lastName}`;
+      conversationName = user.username || user.name;
     }
     if (participants?.length <= 2 && receiver) {
       const receiverUser = await getUserById({ id: receiver });
-      conversationName = `${receiverUser.firstName} ${receiverUser.lastName}`;
+      conversationName = receiverUser.username || receiverUser.name;
     } else conversationName = name;
 
     const conversations = await getConversationByParticipants({
@@ -53,8 +52,8 @@ exports.createConversation = async (req, res) => {
     if (conversations?.length <= 0) {
       await createConversation({ participants, name: conversationName });
       handleSuccessResponse(
-        { message: "Conversation created successfully" },
-        res
+        { message: "Conversation created successfully", code: 201 },
+        res,
       );
       return;
     }

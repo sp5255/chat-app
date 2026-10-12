@@ -8,6 +8,6 @@ exports.handleFieldError = ({ field, message }, res) => {
   });
 };
 
-exports.handleSuccessResponse = ({ field, message }, res) => {
-  res.json({ message }).status(200);
+exports.handleSuccessResponse = ({ field, message, code }, res) => {
+  return res.status(code || 200).json({ message });
 };
