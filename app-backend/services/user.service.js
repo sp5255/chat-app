@@ -12,7 +12,7 @@ exports.getUserById = async ({ id }) => {
   return User.findById({ _id: id });
 };
 
-exports.addUser = async ({ username, email, password }) => {
-  const newUser = new User({ username, email, password });
+exports.addUser = async ({ name, email, password }) => {
+  const newUser = new User({ name, email, password });
   await newUser.save();
 };

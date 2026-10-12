@@ -11,6 +11,12 @@ const {
 } = require("../utils/handleResponse");
 const SECRET_KEY = "secret-key";
 
+const createJwtToken = (user) => {
+  return jwt.sign({ email: user.email }, SECRET_KEY, {
+    expiresIn: 60 * 60,
+  });
+};
+
 const userSignIn = async (req, res) => {
   const { email, password } = req.body || {};
 
@@ -25,9 +31,7 @@ const userSignIn = async (req, res) => {
       .status(401)
       .json({ error: { name: "Password", message: "password is incorrect" } });
   }
-  const token = jwt.sign({ email: user.email }, SECRET_KEY, {
-    expiresIn: 30,
-  });
+  const token = createJwtToken(user);
 
   // Send the token to the user
   res.status(200).json({ token, user: email });
@@ -49,18 +53,21 @@ const validateUserData = async (req, res, next) => {
 };
 
 const userSignUp = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
   const user = await getUser({ email });
   if (user) {
     return res
-      .status(200)
+      .status(400)
       .json({ errors: { name: "email", message: "User already exist" } });
   }
 
   //   const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    await addUser({ username, email, password });
-    handleSuccessResponse({ message: "User sign up successful" }, res);
+    const token = createJwtToken({ email });
+    const user = await addUser({ name, email, password });
+    res
+      .status(201)
+      .json({ token, user: email, message: "User sign up successful" });
   } catch (error) {
     if (error.name === "ValidationError") {
       const errors = {};
@@ -68,7 +75,7 @@ const userSignUp = async (req, res) => {
         errors[key] = error.errors[key].message;
       });
 
-      return res.status(400).send({ errors });
+      return res.status(400).send(errors);
     }
     res.status(500).send("Something went wrong");
   }
@@ -80,7 +87,6 @@ const getUserByEmail = async (req, res) => {
   res.json(user).status(200);
 };
 const getUserById = async (req, res) => {
-  console.log("req params : ", req.params);
   const { id } = req.params || {};
   const user = await getUserByIdService({ id });
   res.json(user).status(200);
