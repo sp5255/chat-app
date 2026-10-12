@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 
 const hideDuration = 2000;
 
-const Toast = ({ message, variant = "error" }) => {
+const Toast = ({ message, variant = "error", shouldRedirect = true }) => {
   const [showToast, setShowToast] = useState(message && variant);
 
   useEffect(() => {
     const t = setTimeout(() => {
-      message && variant && redirect("/login");
+      message && variant && shouldRedirect && redirect("/login");
     }, hideDuration);
     return () => clearTimeout(t);
   }, []);
