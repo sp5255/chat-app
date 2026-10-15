@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const {
   getConversationByUser,
-  createConversation,
+  createConversation: createConversationService,
   getConversationByParticipants,
 } = require("../services/conversation.service");
 const { getUserById } = require("../services/user.service");
@@ -35,6 +35,9 @@ exports.createConversation = async (req, res) => {
       }
     }
 
+    // TODO: conversationName depends on the which user is loggedIn and seeing the chats
+    // This will be dynamic so shouldn't store in database just find out at the run time and send to the user at request time only
+    // Need to change the current logic
     let conversationName;
     let receiver = participants.find((id) => id != user._id.toString());
     if (participants.length === 1) {
@@ -50,7 +53,7 @@ exports.createConversation = async (req, res) => {
     });
 
     if (conversations?.length <= 0) {
-      await createConversation({ participants, name: conversationName });
+      await createConversationService({ participants, name: conversationName });
       handleSuccessResponse(
         { message: "Conversation created successfully", code: 201 },
         res,
@@ -70,4 +73,10 @@ exports.createConversation = async (req, res) => {
     }
     res.status(500).send("Something went wrong");
   }
+};
+
+exports.getConversationByParti = async (req, res) => {
+  const { participants } = req.body;
+  const conversations = await getConversationByParticipants({ participants });
+  return res.status(200).json({ conversations });
 };
