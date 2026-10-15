@@ -7,6 +7,7 @@ const userAuthRoutes = require("./routes/auth.route");
 const makeDBConnection = require("./services/connectDB.service");
 const conversationRoute = require("./routes/conversation.route");
 const { verifyToken } = require("./middleware/auth.middleware");
+const messagesRoute = require("./routes/message.route");
 const PORT = 5500;
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/hello", helloWorldRoute);
 app.use("/user", userAuthRoutes);
 app.use(verifyToken);
 app.use("/conversation", conversationRoute);
+app.use("/messages", messagesRoute);
 
 const server = app.listen(PORT, () => console.log(`listening at ${PORT}`));
 

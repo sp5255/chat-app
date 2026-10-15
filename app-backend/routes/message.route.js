@@ -1,6 +1,11 @@
-const router = require("express").Router();
+const {
+  createNewMessage,
+  getConversationMessages,
+} = require("../controller/message.controller");
 
-router.get("/", async (req, res) => {
+const messagesRoute = require("express").Router();
+
+/* router.get("/", async (req, res) => {
   const users = await User.find({ password: "12345" });
   console.log("users : ", users[0].id);
   const messages = [
@@ -33,6 +38,10 @@ router.get("/", async (req, res) => {
   } catch (e) {
     console.log("err : ", e);
   }
-});
+}); */
 
-module.exports = router
+messagesRoute.post("/new", createNewMessage);
+
+messagesRoute.get("/:conversationId", getConversationMessages);
+
+module.exports = messagesRoute;
