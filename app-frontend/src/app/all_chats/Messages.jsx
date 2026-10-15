@@ -1,8 +1,11 @@
 "use client";
-import { IconButton } from "@mui/material";
+import { IconButton, Paper } from "@mui/material";
 import { ChatContext } from "context/chatContextProvider";
-import { useContext } from "react";
+import { getUser } from "lib/features/auth/authSlice";
+import { useContext, useEffect, useState } from "react";
 import { BsSendFill } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { getChatMessages, getUserById } from "./serverActions";
 
 const MessageInput = () => {
   return (
@@ -24,17 +27,62 @@ const MessageInput = () => {
 };
 
 const Messages = ({ chats }) => {
-  
   const { currentChat } = useContext(ChatContext);
-  const foundChat = chats.find((chat) => chat.id === currentChat?.id);
+  const user = useSelector(getUser);
+  const foundChat = chats.find((chat) => chat._id === currentChat?._id);
+  const [messages, setMessages] = useState([]);
+  const [chatParticipantUser, setChatParticipantUser] = useState();
 
+  const chatUserId = currentChat?.participants?.find(
+    (participant) => participant !== user?._id,
+  );
+
+  // TODO: can we use use() function to get the messages here
+  // Also can we use getChatMessages without server action.
+
+  // TODO: else have some util/commong function and check if we can move over the below pattern
+  useEffect(() => {
+    (async () => {
+      if (currentChat?._id) {
+        const data = await getChatMessages(currentChat._id);
+        setMessages(data?.messages);
+      }
+    })();
+  }, [currentChat?._id]);
+
+  useEffect(() => {
+    (async () => {
+      if (chatUserId) {
+        const data = await getUserById(chatUserId);
+        if (!data.error) setChatParticipantUser(data);
+      }
+    })();
+  }, [chatUserId]);
   // if (!foundChat) return <div>No messages</div>;
 
   return (
     <>
       <div className="relative h-[inherit] px-4">
-        chat here.... {foundChat?.lastMessage}
-        <div></div>
+        {chatParticipantUser && (
+          <Paper sx={{ paddingX: 4, py: 2 }}>
+            {" "}
+            {chatParticipantUser?.name?.toUpperCase()}{" "}
+          </Paper>
+        )}
+        <div>
+          chat here.... {foundChat?.lastMessage}
+          <h2>Messages....{currentChat?._id} </h2>
+          <ul className="flex flex-col">
+            {messages?.map((message) => (
+              <li
+                key={message._id}
+                className={message.senderId === user?._id ? "self-end" : ""}
+              >
+                {message.message}
+              </li>
+            ))}
+          </ul>
+        </div>
         <MessageInput />
       </div>
     </>

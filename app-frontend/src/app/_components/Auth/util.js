@@ -44,3 +44,17 @@ export const handleSubmitForm = async (prevState, actionPayload) => {
     };
   }
 };
+
+export const getUserProfile = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  const resp = await fetch("http://localhost:5500/user/profile", {
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const data = await resp.json();
+  return data;
+};

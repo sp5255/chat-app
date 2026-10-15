@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       >
         <AppRouterCacheProvider>
           <StoreProvider>
-            {/* <UpdateAuthToRedux /> */}
+            <UpdateAuthToRedux />
             <Sidenav />
             <div className="ml-[53px]">
               {children}
