@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const {
-  getUser,
+  getUser: getUserByEmailService,
   addUser,
   getUserById: getUserByIdService,
 } = require("../services/user.service");
@@ -20,7 +20,7 @@ const createJwtToken = (user) => {
 const userSignIn = async (req, res) => {
   const { email, password } = req.body || {};
 
-  const user = await getUser({ email });
+  const user = await getUserByEmailService({ email });
   if (!user) {
     return res.status(401).json({ message: "User not found" });
   }
@@ -54,7 +54,7 @@ const validateUserData = async (req, res, next) => {
 
 const userSignUp = async (req, res) => {
   const { name, email, password } = req.body;
-  const user = await getUser({ email });
+  const user = await getUserByEmailService({ email });
   if (user) {
     return res
       .status(400)
@@ -83,17 +83,38 @@ const userSignUp = async (req, res) => {
 
 const getUserByEmail = async (req, res) => {
   const { email } = req.params;
-  const user = await getUser({ email });
+  const user = await getUserByEmailService({ email });
   res.json(user).status(200);
 };
-const getUserById = async (req, res) => {
-  const { id } = req.params || {};
+
+const getUser = async (req, res) => {
+  const { id, email } = req.query || {};
+
+  if (id) {
+    const user = await getUserByIdService({ id });
+    res.json(user).status(200);
+    return;
+  }
+  if (email) {
+    const user = await getUserByEmailService({ email });
+    res.status(200).json(user);
+    return;
+  }
+
+  res.status(400).json({ message: "Invalid query" });
+};
+
+//TODO: error handler/ handle failure cases
+const getCurrentUserProfile = async (req, res) => {
+  // console.log("user id:", req.user);
+  const { _id: id } = req.user;
   const user = await getUserByIdService({ id });
-  res.json(user).status(200);
+  res.status(200).json(user);
 };
 
 exports.userSignIn = userSignIn;
 exports.userSignUp = userSignUp;
 exports.validateUserData = validateUserData;
 exports.getUserByEmail = getUserByEmail;
-exports.getUserById = getUserById;
+exports.getUser = getUser;
+exports.getCurrentUserProfile = getCurrentUserProfile;

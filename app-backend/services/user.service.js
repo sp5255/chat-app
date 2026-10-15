@@ -5,11 +5,11 @@ const User = require("../models/user.model");
  * OR find if there is any global solution
  *  */
 exports.getUser = async ({ email }) => {
-  return User.findOne({ email });
+  return User.findOne({ email }).select("-password");
 };
 
 exports.getUserById = async ({ id }) => {
-  return User.findById({ _id: id });
+  return User.findById({ _id: id }).select("-password");
 };
 
 exports.addUser = async ({ name, email, password }) => {
