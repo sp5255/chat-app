@@ -26,10 +26,11 @@ const UpdateAuthToRedux = () => {
 
   useEffect(() => {
     (async () => {
-      if (!user?.isAuthenticated) {
-        const user = await getUserProfile();
-        dispatch(addUser({ isAuthenticated: true, ...user }));
-      }
+      // if (!user?.isAuthenticated) {
+      //   const user = await getUserProfile();
+      //   console.log("dispatching user...", user);
+      //   dispatch(addUser({ isAuthenticated: true, ...user }));
+      // }
     })();
   }, []);
   return <></>;

@@ -19,10 +19,7 @@ export const getChatMessages = async (conversationId) => {
   return data;
 };
 
-export const getUserById = async (userId) => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  console.log("cookie : ", token);
+export const getUserById = async (userId, token) => {
   const resp = await fetch("http://localhost:5500/user?id=" + userId, {
     headers: {
       Authorization: token,

@@ -1,16 +1,16 @@
 import SignUpForm from "@/components/Auth/SignUpForm";
+import { authOptions } from "app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const SignUp = () => {
+const SignUp = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    redirect("/all_chats");
+  }
   return <SignUpForm />;
 };
 
 export default SignUp;
-
-/* 
-
-TODO: 
-* protect /login or /sign-up routes if user is logged in
-* user shouldn't access the above routes/pages if already logged in and no invalid token
-
-*/

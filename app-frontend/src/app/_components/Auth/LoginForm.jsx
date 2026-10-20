@@ -1,20 +1,18 @@
 "use client";
-import { addUser } from "lib/features/auth/authSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+
 import { useActionState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { handleSubmitForm } from "./util";
 import Toast from "../Toast";
+import { handleSubmitForm } from "./util";
 
 const LoginForm = () => {
   const [state, formAction, isPending] = useActionState(handleSubmitForm, null);
-  const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
     if (state?.isAuthenticated && !isPending) {
-      // dispatch(addUser({ email: state?.email }));
       router.replace("/all_chats");
     }
   }, [state?.isAuthenticated, isPending]);
@@ -39,7 +37,7 @@ const LoginForm = () => {
           </p>
           <form
             className="space-y-6"
-            action={(e) => formAction({ formData: e, isSignUp: false })}
+            action={(formData) => formAction({ formData, isSignUp: false })}
           >
             <div>
               <label

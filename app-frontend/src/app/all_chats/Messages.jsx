@@ -5,7 +5,8 @@ import { getUser } from "lib/features/auth/authSlice";
 import { useContext, useEffect, useState } from "react";
 import { BsSendFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { getChatMessages, getUserById } from "./serverActions";
+import { /* getChatMessages, */ getUserById } from "./serverActions";
+import { useSession } from "next-auth/react";
 
 const MessageInput = () => {
   return (
@@ -26,7 +27,21 @@ const MessageInput = () => {
   );
 };
 
+const getChatMessages = async (conversationId, token) => {
+  const resp = await fetch("http://localhost:5500/messages/" + conversationId, {
+    // body: JSON.stringify({ conversationId }),
+    headers: {
+      Authorization: token,
+    },
+  });
+
+  const data = await resp.json();
+  console.log("data : ", data);
+  return data;
+};
+
 const Messages = ({ chats }) => {
+  const { data: sessionData, status } = useSession();
   const { currentChat } = useContext(ChatContext);
   const user = useSelector(getUser);
   const foundChat = chats.find((chat) => chat._id === currentChat?._id);
@@ -43,8 +58,11 @@ const Messages = ({ chats }) => {
   // TODO: else have some util/commong function and check if we can move over the below pattern
   useEffect(() => {
     (async () => {
-      if (currentChat?._id) {
-        const data = await getChatMessages(currentChat._id);
+      if (currentChat?._id && sessionData?.backendAccessToken) {
+        const data = await getChatMessages(
+          currentChat._id,
+          sessionData?.backendAccessToken,
+        );
         setMessages(data?.messages);
       }
     })();
@@ -52,8 +70,11 @@ const Messages = ({ chats }) => {
 
   useEffect(() => {
     (async () => {
-      if (chatUserId) {
-        const data = await getUserById(chatUserId);
+      if (chatUserId && sessionData?.backendAccessToken) {
+        const data = await getUserById(
+          chatUserId,
+          sessionData?.backendAccessToken,
+        );
         if (!data.error) setChatParticipantUser(data);
       }
     })();

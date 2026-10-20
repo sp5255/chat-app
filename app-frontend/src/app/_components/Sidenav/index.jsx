@@ -1,4 +1,5 @@
 "use client";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiSolidChat } from "react-icons/bi";
@@ -35,6 +36,7 @@ const Sidenav = () => {
         <TbLogout2
           size={"20px"}
           color={pathname === TABS.logout ? "#006dff" : "#73787b"}
+          onClick={() => signOut()}
         />
       </footer>
     </nav>

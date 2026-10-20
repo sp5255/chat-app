@@ -1,16 +1,12 @@
+import Toast from "@/components/Toast";
 import ChatContextProvider from "context/chatContextProvider";
 import Chat, { NewChatButton } from "./Chat";
 import Messages from "./Messages";
-import Toast from "@/components/Toast";
-import { cookies } from "next/headers";
 // import { Fab } from "@mui/material";
-import { IoAddCircle } from "react-icons/io5";
-import { LuMessageSquarePlus } from "react-icons/lu";
+import { authOptions } from "app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
-const getAllConversations = async (a) => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  // console.log("token on chats", token);
+const getAllConversations = async (token) => {
 
   const resp = await fetch("http://localhost:5500/conversation/all", {
     credentials: "include",
@@ -52,8 +48,10 @@ const chatsArr = [
 ]; */
 
 const AllChats = async () => {
-
-  const { response: chats, error } = await getAllConversations();
+  const session = await getServerSession(authOptions);
+  const { response: chats, error } = await getAllConversations(
+    session?.backendAccessToken,
+  );
 
   if (error?.message) {
     return <Toast message={error?.message} />;
