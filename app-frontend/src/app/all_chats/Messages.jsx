@@ -1,12 +1,12 @@
 "use client";
 import { IconButton, Paper } from "@mui/material";
-import { ChatContext } from "context/chatContextProvider";
 import { getUser } from "lib/features/auth/authSlice";
 import { useContext, useEffect, useState } from "react";
 import { BsSendFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { /* getChatMessages, */ getUserById } from "./serverActions";
 import { useSession } from "next-auth/react";
+import { ChatContext } from "@/context/ChatContextProvider";
 
 const MessageInput = () => {
   return (

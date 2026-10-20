@@ -1,13 +1,12 @@
+import { authOptions } from "@/config/nextAuthConfigOptions";
 import Toast from "@/components/Toast";
-import ChatContextProvider from "context/chatContextProvider";
+import ChatContextProvider from "@/context/ChatContextProvider";
+import { getServerSession } from "next-auth";
 import Chat, { NewChatButton } from "./Chat";
 import Messages from "./Messages";
-// import { Fab } from "@mui/material";
-import { authOptions } from "app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 
 const getAllConversations = async (token) => {
-
+  
   const resp = await fetch("http://localhost:5500/conversation/all", {
     credentials: "include",
     headers: {

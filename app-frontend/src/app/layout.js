@@ -1,9 +1,10 @@
-import { Sidenav, UpdateAuthToRedux } from "@/components/index";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import StoreProvider from "StoreProvider";
 import { Geist, Geist_Mono } from "next/font/google";
-import { NextAuthProvider } from "./_components/NextAuthProvider";
 import "./globals.css";
+import { NextAuthProvider } from "@/components/NextAuthProvider";
+import UpdateAuthToRedux from "@/components/auth/UpdateAuthToRedux";
+import Sidenav from "@/components/sidenav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -1,20 +1,18 @@
 "use client";
-import { useActionState, useEffect } from "react";
-import { handleSubmitForm } from "./util";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Toast from "../Toast";
+import { useRouter } from "next/navigation";
 
-const SignUpForm = () => {
+import { useActionState, useEffect } from "react";
+import Toast from "../Toast";
+import { handleSubmitForm } from "@/components/auth/util";
+
+
+const LoginForm = () => {
   const [state, formAction, isPending] = useActionState(handleSubmitForm, null);
-  const dispatch = useDispatch();
   const router = useRouter();
-  console.log("state : ", state);
 
   useEffect(() => {
     if (state?.isAuthenticated && !isPending) {
-      // dispatch(addUser({ email: state?.email }));
       router.replace("/all_chats");
     }
   }, [state?.isAuthenticated, isPending]);
@@ -39,24 +37,8 @@ const SignUpForm = () => {
           </p>
           <form
             className="space-y-6"
-            action={(e) => formAction({ formData: e, isSignUp: true })}
+            action={(formData) => formAction({ formData, isSignUp: false })}
           >
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Name
-              </label>
-              <input
-                type="name"
-                id="name"
-                name="name"
-                placeholder="Enter your name"
-                className="w-full px-4 py-3 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
             <div>
               <label
                 htmlFor="email"
@@ -97,12 +79,12 @@ const SignUpForm = () => {
             </button>
           </form>
           <p className="text-sm text-center text-gray-500">
-            Already have an account?{" "}
+            Don't have an account?{" "}
             <Link
               className="font-medium text-blue-600 hover:underline"
-              href="/login"
+              href="/sign_up"
             >
-              Sign in
+              Sign up
             </Link>
           </p>
         </div>
@@ -111,4 +93,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;

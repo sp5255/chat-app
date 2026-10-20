@@ -1,6 +1,6 @@
 "use client";
+import { ChatContext } from "@/context/ChatContextProvider";
 import { Avatar, Box, Fab, Modal, Paper, Typography } from "@mui/material";
-import { ChatContext } from "context/chatContextProvider";
 import { useContext, useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
 
