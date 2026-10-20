@@ -13,14 +13,14 @@ const SECRET_KEY = "secret-key";
 
 const createJwtToken = (user) => {
   return jwt.sign({ email: user.email }, SECRET_KEY, {
-    expiresIn: 60 * 60,
+    expiresIn: 40,
   });
 };
 
 const userSignIn = async (req, res) => {
   const { email, password } = req.body || {};
 
-  const user = await getUserByEmailService({ email });
+  const user = await getUserByEmailService({ email, isLogIn: true });
   if (!user) {
     return res.status(401).json({ message: "User not found" });
   }
@@ -34,7 +34,7 @@ const userSignIn = async (req, res) => {
   const token = createJwtToken(user);
 
   // Send the token to the user
-  res.status(200).json({ token, user: email });
+  res.status(200).json({ token, email });
 };
 
 const validateUserData = async (req, res, next) => {

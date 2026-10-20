@@ -4,7 +4,8 @@ const User = require("../models/user.model");
  * add try-catch to every service -> to handle the db operations
  * OR find if there is any global solution
  *  */
-exports.getUser = async ({ email }) => {
+exports.getUser = async ({ email, isLogIn = false }) => {
+  if (isLogIn) return User.findOne({ email });
   return User.findOne({ email }).select("-password");
 };
 
