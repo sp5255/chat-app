@@ -4,53 +4,20 @@ import ChatContextProvider from "@/context/ChatContextProvider";
 import { getServerSession } from "next-auth";
 import Chat, { NewChatButton } from "./Chat";
 import Messages from "./Messages";
+import { fetchUtil, getServerError } from "@/lib/fetch-utility";
 
-const getAllConversations = async (token) => {
-  
-  const resp = await fetch("http://localhost:5500/conversation/all", {
-    credentials: "include",
-    headers: {
-      Authorization: token,
-    },
+const getAllConversations = async () => {
+  const data = await fetchUtil({
+    url: "http://localhost:5500/conversation/all",
   });
-  const data = await resp.json();
 
-  if (!resp.ok) {
-    // if (resp.status === 401) cookieStore.delete("token");
-    return { error: data.error, status: resp.status };
+  if (data.error) {
+    return { ...data, error: data.error };
   }
   return { response: data };
 };
-/* 
-const chatsArr = [
-  {
-    name: "Chat 1",
-    lastMessage: "hey chat 1",
-    lastMessageStatus: "sent",
-    lastMessageTimeStamp: "11:02",
-    id: Math.random() + new Date(),
-  },
-  {
-    name: "Chat 2",
-    lastMessage: "hi chat 2",
-    lastMessageStatus: "sent",
-    lastMessageTimeStamp: "11:02",
-    id: Math.random() + new Date(),
-  },
-  {
-    name: "Chat 3",
-    lastMessage: "hello chat 3",
-    lastMessageStatus: "sent",
-    lastMessageTimeStamp: "11:02",
-    id: Math.random() + new Date(),
-  },
-]; */
-
 const AllChats = async () => {
-  const session = await getServerSession(authOptions);
-  const { response: chats, error } = await getAllConversations(
-    session?.backendAccessToken,
-  );
+  const { response: chats, error } = await getAllConversations();
 
   if (error?.message) {
     return <Toast message={error?.message} />;

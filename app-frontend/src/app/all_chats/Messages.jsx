@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { /* getChatMessages, */ getUserById } from "./serverActions";
 import { useSession } from "next-auth/react";
 import { ChatContext } from "@/context/ChatContextProvider";
+import { fetchUtil } from "@/lib/fetch-utility";
 
 const MessageInput = () => {
   return (
@@ -27,15 +28,11 @@ const MessageInput = () => {
   );
 };
 
-const getChatMessages = async (conversationId, token) => {
-  const resp = await fetch("http://localhost:5500/messages/" + conversationId, {
-    // body: JSON.stringify({ conversationId }),
-    headers: {
-      Authorization: token,
-    },
+const getChatMessages = async (conversationId) => {
+  const data = await fetchUtil({
+    url: "http://localhost:5500/messages/" + conversationId,
   });
 
-  const data = await resp.json();
   console.log("data : ", data);
   return data;
 };
