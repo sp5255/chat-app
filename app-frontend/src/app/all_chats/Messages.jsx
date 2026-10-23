@@ -73,7 +73,7 @@ const Messages = ({ chats }) => {
           chatUserId,
           sessionData?.backendAccessToken,
         );
-        if (!data.error) setChatParticipantUser(data);
+        if (!data?.error) setChatParticipantUser(data);
       }
     })();
   }, [chatUserId]);

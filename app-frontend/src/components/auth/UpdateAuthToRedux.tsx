@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserProfile } from "./util";
+
 import { addUser, getUser } from "@/lib/features/auth/authSlice";
+import { getUserProfile } from "@/components/auth/util";
 
 const UpdateAuthToRedux = () => {
   const dispatch = useDispatch();
@@ -25,15 +26,14 @@ const UpdateAuthToRedux = () => {
   //   })();
   // }, [dispatch]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (!user?.isAuthenticated) {
-  //       const user = await getUserProfile();
-  //       console.log("dispatching user...", user);
-  //       dispatch(addUser({ isAuthenticated: true, ...user }));
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (!user?.isAuthenticated || !user?.email) {
+        const user = await getUserProfile();
+        dispatch(addUser({ isAuthenticated: true, ...user }));
+      }
+    })();
+  }, [dispatch, user?.email, user?.isAuthenticated]);
   return <></>;
 };
 
