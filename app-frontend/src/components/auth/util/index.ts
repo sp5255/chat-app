@@ -1,10 +1,7 @@
-// "use server";
-
 import { authOptions } from "@/config/nextAuthConfigOptions";
+import { fetchUtil } from "@/lib/fetch-utility";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
-
-// import { redirect } from "next/navigation";
 
 const NODE_BASE_URL = "http://localhost:5500";
 
@@ -24,11 +21,12 @@ export const handleSubmitForm = async (prevState, actionPayload) => {
       redirect: false,
     });
     console.log("response : ", res);
+    if (!res) throw new Error("No response recieved");
     if (!res.ok && res.error)
       return { isAuthenticated: false, error: res.error };
 
     if (res.ok && !res.error) return { isAuthenticated: true };
-  } catch (e) {
+  } catch (e: any) {
     console.log("error in submit form: ", e);
     return {
       isAuthenticated: false,
@@ -38,15 +36,6 @@ export const handleSubmitForm = async (prevState, actionPayload) => {
 };
 
 export const getUserProfile = async () => {
-  const { backendAccessToken } = (await getServerSession(authOptions)) || {};
-  console.log("backedn access token : ", backendAccessToken);
-
-  const resp = await fetch("http://localhost:5500/user/profile", {
-    headers: {
-      Authorization: backendAccessToken,
-    },
-  });
-
-  const data = await resp.json();
+  const data = await fetchUtil("http://localhost:5500/user/profile");
   return data;
 };

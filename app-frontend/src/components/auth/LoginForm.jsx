@@ -6,7 +6,6 @@ import { useActionState, useEffect } from "react";
 import Toast from "../Toast";
 import { handleSubmitForm } from "@/components/auth/util";
 
-
 const LoginForm = () => {
   const [state, formAction, isPending] = useActionState(handleSubmitForm, null);
   const router = useRouter();

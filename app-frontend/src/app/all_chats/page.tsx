@@ -1,15 +1,11 @@
-import { authOptions } from "@/config/nextAuthConfigOptions";
 import Toast from "@/components/Toast";
 import ChatContextProvider from "@/context/ChatContextProvider";
-import { getServerSession } from "next-auth";
+import { fetchUtil } from "@/lib/fetch-utility";
 import Chat, { NewChatButton } from "./Chat";
 import Messages from "./Messages";
-import { fetchUtil, getServerError } from "@/lib/fetch-utility";
 
 const getAllConversations = async () => {
-  const data = await fetchUtil({
-    url: "http://localhost:5500/conversation/all",
-  });
+  const data = await fetchUtil("http://localhost:5500/conversation/all");
 
   if (data.error) {
     return { ...data, error: data.error };

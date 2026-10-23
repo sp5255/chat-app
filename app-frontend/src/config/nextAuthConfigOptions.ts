@@ -1,5 +1,12 @@
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-export const authOptions = {
+
+interface dataToSendInterface {
+  email: string;
+  password: string;
+  name?: string;
+}
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -18,7 +25,7 @@ export const authOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials: any, req): Promise<any> {
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
@@ -31,7 +38,7 @@ export const authOptions = {
         // console.log("credentials : ", credentials, !!isSignUp);
 
         const url = JSON.parse(isSignUp) ? "user/sign-up" : "user/sign-in";
-        const dataToSend = { email, password };
+        const dataToSend: dataToSendInterface = { email, password };
         if (isSignUp) dataToSend.name = name;
 
         const NODE_BASE_URL = "http://localhost:5500";
@@ -65,13 +72,13 @@ export const authOptions = {
   //   // maxAge: 40,
   // },
   callbacks: {
-    async jwt({ token, account, profile, user }) {
+    async jwt({ token, account, profile, user }: any) {
       if (user) {
         token.backendAccessToken = user.token;
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       session.backendAccessToken = token.backendAccessToken;
       return session;
     },

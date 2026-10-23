@@ -1,6 +1,6 @@
 "use client";
 import { IconButton, Paper } from "@mui/material";
-import { getUser } from "lib/features/auth/authSlice";
+
 import { useContext, useEffect, useState } from "react";
 import { BsSendFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { /* getChatMessages, */ getUserById } from "./serverActions";
 import { useSession } from "next-auth/react";
 import { ChatContext } from "@/context/ChatContextProvider";
 import { fetchUtil } from "@/lib/fetch-utility";
+import { getUser } from "@/lib/features/auth/authSlice";
 
 const MessageInput = () => {
   return (
@@ -29,9 +30,9 @@ const MessageInput = () => {
 };
 
 const getChatMessages = async (conversationId) => {
-  const data = await fetchUtil({
-    url: "http://localhost:5500/messages/" + conversationId,
-  });
+  const data = await fetchUtil(
+    "http://localhost:5500/messages/" + conversationId,
+  );
 
   console.log("data : ", data);
   return data;

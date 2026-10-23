@@ -1,18 +1,19 @@
 import { authOptions } from "@/config/nextAuthConfigOptions";
 
-export const fetchUtil = async ({ url, body, method = "GET", options }) => {
+export const fetchUtil = async (url: Request | string, options?: RequestInit) => {
   let token = "";
   try {
+    const { body, method = "GET", headers: headerOptions } = options || {};
     // when used in client components
     if (typeof window !== "undefined") {
       const { getSession } = await import("next-auth/react");
-      const session = await getSession();
+      const session: any = await getSession();
       console.log("client session : ", session);
       token = session.backendAccessToken;
     } else {
       // when used in server components
       const { getServerSession } = await import("next-auth");
-      const session = await getServerSession(authOptions);
+      const session: any = await getServerSession(authOptions);
       console.log("server session : ", session);
       token = session.backendAccessToken;
     }
@@ -23,7 +24,7 @@ export const fetchUtil = async ({ url, body, method = "GET", options }) => {
       headers: {
         Authorization: token,
         "Content-Type": "application/json",
-        ...options,
+        ...headerOptions,
       },
     });
 
