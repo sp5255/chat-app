@@ -5,10 +5,10 @@ import "./globals.css";
 
 import UpdateAuthToRedux from "@/components/auth/UpdateAuthToRedux";
 import Sidenav from "@/components/sidenav";
-// import Toast from "@/components/Toast";
 import StoreProvider from "@/StoreProvider";
 import { ReactNode } from "react";
 import { NextAuthProvider } from "@/components/NextAuthProvider";
+import Toast from "@/components/Toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +35,7 @@ export default async function RootLayout({ children } : {children: ReactNode}) {
           <StoreProvider>
             <NextAuthProvider>
               <UpdateAuthToRedux />
-              {/* <Toast /> */}
+              <Toast />
               <Sidenav />
               <div className="ml-[53px]">{children}</div>
             </NextAuthProvider>
