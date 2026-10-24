@@ -1,4 +1,5 @@
-const Message = require("../models/message.model");
+import Message from "@/models/message.model";
+
 
 export const createMessage = async ({
   conversationId,

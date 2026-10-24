@@ -6,8 +6,9 @@ import {
   validateUserData,
 } from "@/controller/auth.controller.js";
 import { verifyToken } from "@/middleware/auth.middleware.js";
+import { Router } from "express";
 
-const router = require("express").Router();
+const router = Router();
 
 router.get("/profile", verifyToken, getCurrentUserProfile);
 router.post("/sign-in", validateUserData, userSignIn);

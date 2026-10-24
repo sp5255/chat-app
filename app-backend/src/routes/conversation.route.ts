@@ -1,6 +1,11 @@
-import { getAllConversationsByUser, createConversation, getConversationByParti } from "@/controller/conversation.controller.js";
+import {
+  getAllConversationsByUser,
+  createConversation,
+  getConversationByParti,
+} from "@/controller/conversation.controller";
 
-const conversationRoute = require("express").Router();
+import { Router } from "express";
+const conversationRoute = Router();
 
 conversationRoute.get("/all", getAllConversationsByUser);
 conversationRoute.get("/part", getConversationByParti);

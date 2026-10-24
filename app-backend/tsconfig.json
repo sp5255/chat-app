@@ -12,8 +12,10 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
     "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
     // "types": [],
     // For nodejs:
     "lib": ["esnext"],
@@ -46,8 +48,8 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
 
-    "rewriteRelativeImportExtensions": true,
-    "erasableSyntaxOnly": true,
+    // "rewriteRelativeImportExtensions": true,
+    // "erasableSyntaxOnly": true,
     // "noEmit": true,
   
   },

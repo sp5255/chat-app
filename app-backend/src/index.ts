@@ -1,17 +1,19 @@
-import express, { type Request } from "express";
+import "module-alias/register";
+import express, { type RequestHandler } from "express";
 import cors from "cors";
+import makeDBConnection from "@/services/connectDB.service";
+import { verifyToken } from "@/middleware/auth.middleware";
+import conversationRoute from "@/routes/conversation.route";
+import messagesRoute from "@/routes/message.route";
+import helloWorldRoute from "@/routes/hello-world.route";
+import userAuthRoutes from "@/routes/auth.route";
 
 // const bcrypt = require("bcrypt");
-import helloWorldRoute from "./routes/hello-world.route.js";
-import userAuthRoutes from "./routes/auth.route.js";
-import makeDBConnection from "./services/connectDB.service.js";
-import conversationRoute from "./routes/conversation.route.js";
-import { verifyToken } from "./middleware/auth.middleware.js";
-import messagesRoute from "./routes/message.route.js";
+
 const PORT = 5500;
 const app = express();
 
-const logger = (req: Request, _, next) => {
+const logger: RequestHandler = (req, _, next) => {
   console.log(req.method, req.path);
   next();
 };

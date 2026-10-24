@@ -1,7 +1,8 @@
-import { type Response } from "express";
-const router = require("express").Router();
+import { Router, type Response } from "express";
 
-router.get("/", (_:any, res: Response) => {
+const router = Router();
+
+router.get("/", (_: any, res: Response) => {
   res
     .json({
       message: "Hello world",

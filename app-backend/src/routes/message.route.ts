@@ -1,9 +1,11 @@
+import { Router } from "express";
+
 import {
   createNewMessage,
   getConversationMessages,
 } from "@/controller/message.controller.js";
 
-const messagesRoute = require("express").Router();
+const messagesRoute = Router();
 
 /* router.get("/", async (req, res) => {
   const users = await User.find({ password: "12345" });
