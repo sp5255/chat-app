@@ -1,7 +1,7 @@
-const {
+import {
   createNewMessage,
   getConversationMessages,
-} = require("../controller/message.controller");
+} from "@/controller/message.controller.js";
 
 const messagesRoute = require("express").Router();
 
@@ -44,4 +44,4 @@ messagesRoute.post("/new", createNewMessage);
 
 messagesRoute.get("/:conversationId", getConversationMessages);
 
-module.exports = messagesRoute;
+export default messagesRoute;

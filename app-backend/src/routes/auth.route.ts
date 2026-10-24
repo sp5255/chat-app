@@ -1,14 +1,13 @@
-const router = require("express").Router();
-
-const {
+import {
+  getCurrentUserProfile,
+  getUser,
   userSignIn,
   userSignUp,
   validateUserData,
-  getUserByEmail,
-  getCurrentUserProfile,
-  getUser,
-} = require("../controller/auth.controller");
-const { verifyToken } = require("../middleware/auth.middleware");
+} from "@/controller/auth.controller.js";
+import { verifyToken } from "@/middleware/auth.middleware.js";
+
+const router = require("express").Router();
 
 router.get("/profile", verifyToken, getCurrentUserProfile);
 router.post("/sign-in", validateUserData, userSignIn);
@@ -16,4 +15,4 @@ router.post("/sign-up", validateUserData, userSignUp);
 // router.get("/:email", getUserByEmail);
 router.get("/", verifyToken, getUser);
 
-module.exports = router;
+export default router;

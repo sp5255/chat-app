@@ -3,7 +3,11 @@
   "compilerOptions": {
     // File Layout
     "rootDir": "./src",
-    // "outDir": "./dist",
+    "outDir": "./dist",
+   
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     
 
     // Environment Settings
@@ -44,7 +48,7 @@
 
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
-    "noEmit": true,
+    // "noEmit": true,
   
   },
   "include": ["src/**/*"],

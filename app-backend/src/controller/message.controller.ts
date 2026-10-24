@@ -1,14 +1,14 @@
-const { getConversationByUser } = require("../services/conversation.service");
-const {
+import type { RequestHandler } from "express";
+import { getConversationByUser } from "../services/conversation.service.js";
+import {
   createMessage,
   getMessageByConversationId,
-} = require("../services/message.service");
-const { handleSuccessResponse } = require("../utils/handleResponse");
+} from "../services/message.service.js";
+import { handleSuccessResponse } from "../utils/handleResponse.js";
 
-exports.createNewMessage = async (req, res) => {
+export const createNewMessage: RequestHandler = async (req, res) => {
   const { conversationId, message, senderId } = req.body || {};
   try {
-    const conversation = await getConversationByUser();
     await createMessage({ conversationId, senderId, message });
     handleSuccessResponse(
       { message: "message created successfully", code: 201 },
@@ -17,13 +17,15 @@ exports.createNewMessage = async (req, res) => {
   } catch (e) {}
 };
 
-exports.getConversationMessages = async (req, res) => {
+export const getConversationMessages: RequestHandler<{
+  conversationId: string;
+}> = async (req, res) => {
   const { conversationId } = req.params;
 
   try {
     const messages = await getMessageByConversationId(conversationId);
     return res.status(200).json({ messages });
-  } catch (e) {
+  } catch (e: any) {
     res.status(400).json({ error: e.message });
   }
 };

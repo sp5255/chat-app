@@ -1,6 +1,7 @@
+import { type Response } from "express";
 const router = require("express").Router();
 
-router.get("/", (_, res) => {
+router.get("/", (_:any, res: Response) => {
   res
     .json({
       message: "Hello world",
@@ -9,4 +10,4 @@ router.get("/", (_, res) => {
     .status(200);
 });
 
-module.exports = router;
+export default router;

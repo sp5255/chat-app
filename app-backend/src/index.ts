@@ -1,17 +1,17 @@
-const express = require("express");
-const cors = require("cors");
+import express, { type Request } from "express";
+import cors from "cors";
 
 // const bcrypt = require("bcrypt");
-const helloWorldRoute = require("./routes/hello-world.route");
-const userAuthRoutes = require("./routes/auth.route");
-const makeDBConnection = require("./services/connectDB.service");
-const conversationRoute = require("./routes/conversation.route");
-const { verifyToken } = require("./middleware/auth.middleware");
-const messagesRoute = require("./routes/message.route");
+import helloWorldRoute from "./routes/hello-world.route.js";
+import userAuthRoutes from "./routes/auth.route.js";
+import makeDBConnection from "./services/connectDB.service.js";
+import conversationRoute from "./routes/conversation.route.js";
+import { verifyToken } from "./middleware/auth.middleware.js";
+import messagesRoute from "./routes/message.route.js";
 const PORT = 5500;
 const app = express();
 
-const logger = (req, _, next) => {
+const logger = (req: Request, _, next) => {
   console.log(req.method, req.path);
   next();
 };

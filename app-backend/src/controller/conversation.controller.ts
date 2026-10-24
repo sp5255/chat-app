@@ -1,23 +1,30 @@
-const User = require("../models/user.model");
-const {
-  getConversationByUser,
-  createConversation: createConversationService,
-  getConversationByParticipants,
-} = require("../services/conversation.service");
-const { getUserById } = require("../services/user.service");
-const { handleSuccessResponse } = require("../utils/handleResponse");
+import type { RequestHandler } from "express";
 
-exports.getAllConversationsByUser = async (req, res) => {
+import User from "../models/user.model.js";
+import {
+  getConversationByUser,
+  createConversation as createConversationService,
+  getConversationByParticipants,
+} from "../services/conversation.service.js";
+import { getUserById } from "../services/user.service.js";
+import { handleSuccessResponse } from "../utils/handleResponse.js";
+
+// TODO: extend Reqest or RequestHandler interface to suppor the user in req
+export const getAllConversationsByUser: RequestHandler = async (
+  req: any,
+  res,
+) => {
   const allConversation = await getConversationByUser({
     participants: [req.user._id],
   });
   res.json(allConversation).status(200);
 };
 
-exports.createConversation = async (req, res) => {
+export const createConversation: RequestHandler = async (req: any, res) => {
   try {
     const { user } = req;
-    const { participants, name } = req.body || {};
+    const { participants, name }: { participants: string[]; name: string } =
+      req.body || {};
     if (!participants.includes(user._id.toString()))
       return res.status(400).json({
         errors: {
@@ -38,14 +45,14 @@ exports.createConversation = async (req, res) => {
     // TODO: conversationName depends on the which user is loggedIn and seeing the chats
     // This will be dynamic so shouldn't store in database just find out at the run time and send to the user at request time only
     // Need to change the current logic
-    let conversationName;
-    let receiver = participants.find((id) => id != user._id.toString());
+    let conversationName = "";
+    let receiver = participants.find((id: any) => id != user._id.toString());
     if (participants.length === 1) {
       conversationName = user.username || user.name;
     }
     if (participants?.length <= 2 && receiver) {
       const receiverUser = await getUserById({ id: receiver });
-      conversationName = receiverUser.username || receiverUser.name;
+      conversationName = receiverUser?.name || "";
     } else conversationName = name;
 
     const conversations = await getConversationByParticipants({
@@ -62,20 +69,20 @@ exports.createConversation = async (req, res) => {
     }
     // throw new Error("custom err");
     res.status(400).json({ message: "Conversation already exist" });
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === "ValidationError") {
-      const errors = {};
+      const errors: any = {};
       Object.keys(error.errors).forEach((key) => {
         errors[key] = error.errors[key].message;
       });
 
-      return res.status(400).send({ errors });
+      return res.status(400).send(errors);
     }
     res.status(500).send("Something went wrong");
   }
 };
 
-exports.getConversationByParti = async (req, res) => {
+export const getConversationByParti: RequestHandler = async (req, res) => {
   const { participants } = req.body;
   const conversations = await getConversationByParticipants({ participants });
   return res.status(200).json({ conversations });

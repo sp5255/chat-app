@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose";
 
 const conversationSchema = new Schema({
   participants: {
@@ -9,13 +9,13 @@ const conversationSchema = new Schema({
       },
     ],
     validate: {
-      validator: (participants) => {
+      validator: (participants: Array<string>) => {
         participants = participants.map((userId) => userId.toString());
         if (new Set(participants).size !== participants.length) return false;
         return participants.length > 1;
       },
-      message: (props) => {
-        props.value = props.value.map((userId) => userId.toString());
+      message: (props: any) => {
+        props.value = props.value.map((userId: any) => userId.toString());
         if (new Set(props.value).size !== props.value.length)
           return "participants should be unique";
         return "there should be atlease 1 participant for conversation";
@@ -35,4 +35,4 @@ const conversationSchema = new Schema({
 });
 
 const Conversation = model("Conversation", conversationSchema);
-module.exports = Conversation;
+export default Conversation;

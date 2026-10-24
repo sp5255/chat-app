@@ -1,15 +1,23 @@
-const Conversation = require("../models/conversation.model");
+import Conversation from "@/models/conversation.model.js";
 
 // TODO: any logged in user shouldn't get any other conversation just by the conversation id or participants
 // there user that is logged in should be able to get only it's related converations and same for messages.
 
-exports.getConversationByUser = async ({ participants }) => {
+export const getConversationByUser = async ({
+  participants,
+}: {
+  participants: Array<string>;
+}) => {
   return Conversation.find().all("participants", participants);
 };
 
-exports.getConversationByParticipants = async ({ participants }) => {
+export const getConversationByParticipants = async ({
+  participants,
+}: {
+  participants: Array<string>;
+}) => {
   const query = Conversation.find().all("participants", participants);
-  const filter = {};
+  const filter: any = {};
   participants.forEach((element) => {
     filter.$eq = element;
   });
@@ -19,7 +27,15 @@ exports.getConversationByParticipants = async ({ participants }) => {
   return query;
 };
 
-exports.createConversation = async ({ participants, name, lastMessage }) => {
+export const createConversation = async ({
+  participants,
+  name,
+  lastMessage,
+}: {
+  participants: Array<string>;
+  name: string;
+  lastMessage?: string;
+}) => {
   const conversation = new Conversation({
     participants,
     name,

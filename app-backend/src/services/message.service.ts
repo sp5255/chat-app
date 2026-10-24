@@ -1,6 +1,14 @@
 const Message = require("../models/message.model");
 
-exports.createMessage = async ({ conversationId, message, senderId }) => {
+export const createMessage = async ({
+  conversationId,
+  message,
+  senderId,
+}: {
+  conversationId: string;
+  message: string;
+  senderId: string;
+}) => {
   const messageToBeSaved = new Message({
     conversationId,
     message,
@@ -10,7 +18,7 @@ exports.createMessage = async ({ conversationId, message, senderId }) => {
   await messageToBeSaved.save();
 };
 
-exports.getMessageByConversationId = async (conversationId) => {
+export const getMessageByConversationId = async (conversationId: string) => {
   const query = await Message.find({ conversationId });
   console.log("query : ", query);
   return query;
