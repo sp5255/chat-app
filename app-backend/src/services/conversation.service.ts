@@ -33,7 +33,7 @@ export const createConversation = async ({
   lastMessage,
 }: {
   participants: Array<string>;
-  name: string;
+  name?: string;
   lastMessage?: string;
 }) => {
   const conversation = new Conversation({

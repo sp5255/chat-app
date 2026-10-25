@@ -14,7 +14,7 @@ const SECRET_KEY = "secret-key";
 
 const createJwtToken = (user: any) => {
   return jwt.sign({ email: user.email }, SECRET_KEY, {
-    expiresIn: 40,
+    expiresIn: 60 * 60,
   });
 };
 

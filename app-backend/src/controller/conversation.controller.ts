@@ -9,6 +9,19 @@ import {
 import { getUserById } from "../services/user.service.js";
 import { handleSuccessResponse } from "../utils/handleResponse.js";
 
+const getConversationName = async ({ participants, user }: any) => {
+  const SAMPLE_CHAT = "SAMPLE_CHAT";
+  let receiver = participants.find((id: any) => id != user._id.toString());
+  if (participants.length === 1) {
+    return user.name;
+  }
+  if (participants?.length <= 2 && receiver) {
+    const receiverUser = await getUserById({ id: receiver });
+    return receiverUser?.name || "";
+  }
+  return SAMPLE_CHAT;
+};
+
 // TODO: extend Reqest or RequestHandler interface to suppor the user in req
 export const getAllConversationsByUser: RequestHandler = async (
   req: any,
@@ -17,7 +30,21 @@ export const getAllConversationsByUser: RequestHandler = async (
   const allConversation = await getConversationByUser({
     participants: [req.user._id],
   });
-  res.json(allConversation).status(200);
+
+  const conversationsWithName = await Promise.all(
+    allConversation.map(async (conversation: any) => {
+      const conversationName = await getConversationName({
+        participants: conversation.participants,
+        user: req.user,
+      });
+      return {
+        ...conversation.toJSON(),
+        name: conversationName,
+      };
+    }),
+  );
+
+  res.json(conversationsWithName).status(200);
 };
 
 export const createConversation: RequestHandler = async (req: any, res) => {
@@ -42,25 +69,16 @@ export const createConversation: RequestHandler = async (req: any, res) => {
       }
     }
 
-    // TODO: conversationName depends on the which user is loggedIn and seeing the chats
+    // TODO: conversationName depends on the which user is loggedIn and seeing the chats -- Done -> moved to function getConversationName
     // This will be dynamic so shouldn't store in database just find out at the run time and send to the user at request time only
-    // Need to change the current logic
-    let conversationName = "";
-    let receiver = participants.find((id: any) => id != user._id.toString());
-    if (participants.length === 1) {
-      conversationName = user.username || user.name;
-    }
-    if (participants?.length <= 2 && receiver) {
-      const receiverUser = await getUserById({ id: receiver });
-      conversationName = receiverUser?.name || "";
-    } else conversationName = name;
+    // Need to change the current logic 
 
     const conversations = await getConversationByParticipants({
       participants,
     });
 
     if (conversations?.length <= 0) {
-      await createConversationService({ participants, name: conversationName });
+      await createConversationService({ participants });
       handleSuccessResponse(
         { message: "Conversation created successfully", code: 201 },
         res,
