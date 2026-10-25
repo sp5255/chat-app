@@ -44,11 +44,6 @@ const Messages = ({ chats }) => {
   const user = useSelector(getUser);
   const foundChat = chats.find((chat) => chat._id === currentChat?._id);
   const [messages, setMessages] = useState([]);
-  const [chatParticipantUser, setChatParticipantUser] = useState();
-
-  const chatUserId = currentChat?.participants?.find(
-    (participant) => participant !== user?._id,
-  );
 
   // TODO: can we use use() function to get the messages here
   // Also can we use getChatMessages without server action.
@@ -66,28 +61,15 @@ const Messages = ({ chats }) => {
     })();
   }, [currentChat?._id]);
 
-  useEffect(() => {
-    (async () => {
-      if (chatUserId && sessionData?.backendAccessToken) {
-        const data = await getUserById(
-          chatUserId,
-          sessionData?.backendAccessToken,
-        );
-        if (!data?.error) setChatParticipantUser(data);
-      }
-    })();
-  }, [chatUserId]);
   // if (!foundChat) return <div>No messages</div>;
 
   return (
     <>
       <div className="relative h-[inherit] px-4">
-        {chatParticipantUser && (
-          <Paper sx={{ paddingX: 4, py: 2 }}>
-            {" "}
-            {chatParticipantUser?.name?.toUpperCase()}{" "}
-          </Paper>
-        )}
+        <Paper sx={{ paddingX: 4, py: 2 }}>
+          {currentChat?.name?.toUpperCase()}{" "}
+        </Paper>
+
         <div>
           chat here.... {foundChat?.lastMessage}
           <h2>Messages....{currentChat?._id} </h2>
