@@ -41,8 +41,8 @@ export const authOptions: NextAuthOptions = {
         const dataToSend: dataToSendInterface = { email, password };
         if (isSignUp) dataToSend.name = name;
 
-        const NODE_BASE_URL = "http://localhost:5500";
-        const res = await fetch(`${NODE_BASE_URL}/${url}`, {
+        // const NODE_BASE_URL = "http://localhost:5500";
+        const res = await fetch(`${process.env.NEXT_PUBLIC_NODE_URL}/${url}`, {
           method: "POST",
           body: JSON.stringify(dataToSend),
           headers: { "Content-Type": "application/json" },

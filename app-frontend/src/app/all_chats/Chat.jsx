@@ -1,8 +1,9 @@
 "use client";
-import { ChatContext } from "@/context/ChatContextProvider";
-import { Avatar, Box, Fab, Modal, Paper, Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { Avatar, Fab, Modal, Paper, Typography } from "@mui/material";
+import { useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
+
+import { useChat } from "@/hooks/useChat";
 
 function stringToColor(string) {
   let hash = 0;
@@ -36,14 +37,13 @@ function stringAvatar(name) {
 const Chat = ({ chatData }) => {
   const { name, lastMessage, lastMessageTimeStamp, id, lastMessageStatus } =
     chatData;
-
-  const { currentChat, setCurrentChat } = useContext(ChatContext);
+  const { handleChatClick, currentChat } = useChat();
 
   return (
     <Paper
       className="flex gap-2 p-4 w-full items-center hover:bg-secondary-grey hover:cursor-pointer hover:transition-colors "
       elevation={3}
-      onClick={() => setCurrentChat(chatData)}
+      onClick={() => handleChatClick(chatData)}
       sx={{
         background: currentChat?.id === id ? "#cccccc63" : "",
         borderRadius: 4,
