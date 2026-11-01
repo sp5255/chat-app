@@ -6,6 +6,7 @@ import {
 } from "../services/message.service.js";
 import { handleSuccessResponse } from "../utils/handleResponse.js";
 
+// TODO: make sure to create messae in the conversation only if the logged in user is part of the conversation, otherwise return error
 export const createNewMessage: RequestHandler = async (req, res) => {
   const { conversationId, message, senderId } = req.body || {};
   try {
@@ -17,6 +18,7 @@ export const createNewMessage: RequestHandler = async (req, res) => {
   } catch (e) {}
 };
 
+// TODO: make sure it will return the conversation of current authenticated user only, not any conversation with that id
 export const getConversationMessages: RequestHandler<{
   conversationId: string;
 }> = async (req, res) => {

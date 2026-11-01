@@ -10,10 +10,11 @@ import {
   handleSuccessResponse,
   handleFieldError,
 } from "../utils/handleResponse.js";
+import { sharedToken } from "@/constants/sharedTokenMap.js";
 const SECRET_KEY = "secret-key";
 
 const createJwtToken = (user: any) => {
-  return jwt.sign({ email: user.email }, SECRET_KEY, {
+  return jwt.sign({ email: user.email, id: user._id }, SECRET_KEY, {
     expiresIn: 60 * 60,
   });
 };
@@ -33,6 +34,8 @@ const userSignIn = async (req: Request, res: Response) => {
       .json({ error: { name: "Password", message: "password is incorrect" } });
   }
   const token = createJwtToken(user);
+  if (!sharedToken.has(user._id.toString()))
+    sharedToken.set(user._id.toString(), token);
 
   // Send the token to the user
   res.status(200).json({ token, email });
