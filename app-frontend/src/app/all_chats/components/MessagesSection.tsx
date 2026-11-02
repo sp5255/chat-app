@@ -6,7 +6,7 @@ import MessageInput from "@/app/all_chats/components/MessageInput";
 import { useMessages } from "@/hooks/useMessages";
 import { getUser } from "@/lib/features/auth/authSlice";
 
-const Messages = () => {
+const MessagesSection = () => {
   const user = useSelector(getUser);
   const { messages, receivedMessages, currentChat, messagesContainerRef } =
     useMessages();
@@ -68,4 +68,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default MessagesSection;

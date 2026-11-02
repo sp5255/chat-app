@@ -1,8 +1,8 @@
 import Toast from "@/components/Toast";
 import ChatContextProvider from "@/context/ChatContextProvider";
 import { fetchUtil } from "@/lib/fetch-utility";
-import Chat, { NewChatButton } from "./Chat";
-import Messages from "./Messages";
+import Chat, { NewChatButton } from "./components/Chat";
+import Messages from "./components/MessagesSection";
 import { SocketProvider } from "@/components/SocketProvider";
 
 const getAllConversations = async () => {
