@@ -1,5 +1,5 @@
 import axiosConstructor from "axios";
-import { redirect } from "next/navigation";
+import { createApiErrorObj } from "utils";
 
 const axios = axiosConstructor.create({
   baseURL: "http://localhost:5500",
@@ -8,9 +8,9 @@ const axios = axiosConstructor.create({
 });
 
 axios.interceptors.request.use(
-  async function (config) {
+  async (config) => {
+    // const token = await cookieStore.get("token");
     if (typeof window !== "undefined") {
-      const token = await cookieStore.get("token");
       config.headers.Authorization = token?.value;
     } else {
       /* add token to header for server side */
@@ -22,7 +22,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  function (error) {
+  (error) => {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -30,21 +30,12 @@ axios.interceptors.request.use(
 
 // Add a response interceptor
 axios.interceptors.response.use(
-  async function (response) {
-    if (response.status === 401) {
-      cookieStore.delete("token");
-    }
+  async (response) => {
     return response;
   },
-  async function (error) {
-    const { status, data } = error.response || {};
-    if (status === 401 && typeof window !== "undefined") {
-      cookieStore.delete("token");
-    } else if (status === 401) {
-      // console.log("axios redirect");
-      redirect("/login");
-    }
-    return Promise.reject(error.response);
+  async (error) => {
+    // console.log('data : ', error.response);
+    return Promise.reject(createApiErrorObj(error.response));
   }
 );
 
