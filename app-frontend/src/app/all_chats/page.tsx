@@ -24,7 +24,7 @@ const AllChats = async () => {
     <SocketProvider>
       <ChatContextProvider>
         <div className="flex h-[100vh] ">
-          <section className="overflow-y-auto max-h-[100vh] relative bg-[#f9fbfc] scrollbar-hide max-w-md w-full flex flex-col gap-2 px-8 py-4 ">
+          <section className="overflow-y-auto max-h-[100vh] relative  scrollbar-hide max-w-md w-full flex flex-col gap-2 px-8 py-4 ">
             {Array.isArray(chats) &&
               chats?.map((chat, Idx) => (
                 <Chat chatData={chat} key={chat?._id} />
@@ -33,7 +33,7 @@ const AllChats = async () => {
             <NewChatButton />
           </section>
           <section className=" h-[inherit] flex-1">
-            <Messages chats={chats} />
+            <Messages />
           </section>
         </div>
       </ChatContextProvider>

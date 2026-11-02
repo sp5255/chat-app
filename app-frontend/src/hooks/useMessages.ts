@@ -4,7 +4,7 @@ import { disconnectSocket } from "@/config/socket";
 import { ChatContext } from "@/context/ChatContextProvider";
 import { fetchUtil } from "@/lib/fetch-utility";
 import { useSession } from "next-auth/react";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const getChatMessages = async (conversationId: string) => {
   const data = await fetchUtil(
@@ -23,6 +23,8 @@ export const useMessages = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [receivedMessages, setReceivedMessages] = useState<any[]>([]);
 
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
   const messageSentEventHandler = useCallback((message: any) => {
     console.log("received msg : ", message);
     setReceivedMessages((prev) => [...prev, message]);
@@ -31,6 +33,10 @@ export const useMessages = () => {
   const receiveMessageEventHandler = useCallback((data: any) => {
     console.log("roomMessage:receive ...", data);
     setReceivedMessages((prev) => [...prev, data]);
+    messagesContainerRef.current?.scrollTo({
+      top: messagesContainerRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, []);
 
   const authErrorHandler = useCallback((msg: any) => {
@@ -76,5 +82,6 @@ export const useMessages = () => {
     messages,
     receivedMessages,
     currentChat,
+    messagesContainerRef,
   };
 };
